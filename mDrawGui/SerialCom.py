@@ -43,7 +43,7 @@ class serialRead(threading.Thread):
         self.cb = cb
         self.running = True
         threading.Thread.__init__(self)
-    
+
     def run(self):
         while self.running:
             l = self.ser.readline().decode('utf-8')
@@ -55,28 +55,26 @@ class serialCom():
         self.rxcb = rxCallback
         self.ser = None
         return
-    
+
     def connect(self,port,baud=115200):
         self.ser = serial.Serial(port, baud)
         self.rxth = serialRead(self.ser,self.rxcb)
         self.rxth.setDaemon(True)
-        self.rxth.start() 
+        self.rxth.start()
         return
-    
+
     def close(self):
         self.rxth.running = False
         self.ser.close()
         self.rxth = None
         self.ser = None
-        
+
     def send(self,msg):
         if self.ser == None:
             return
-        self.ser.write(msg.encode('utf-8'))
-        # print("send: "+msg) # send log
-        
-
-
-
-
-
+        try:
+            self.ser.write(msg.encode('utf-8'))
+            print("sent: " + msg) # send log
+        except:
+            e = sys.exc_info()[0]
+            print("Error when communicating with serial port: %s" % e) # send log
