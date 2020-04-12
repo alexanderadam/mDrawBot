@@ -1,5 +1,11 @@
 #mDrawBot ---- Draw Your Own Legend
 
+## Usage with Docker
+
+```bash
+$ Just run `./run.sh`
+```
+
 ## Notes for Mac Users
 
 1. Use [Version 1.2.2](http://download.makeblock.com/mdraw/mDraw_V1.2.2_mac.app.zip) - it fixed some issues on firmware update.
@@ -40,25 +46,25 @@ mCar is a three-wheel robot car, it contains two stepper motor drive wheels and 
 
 ![mCar](https://ksr-ugc.imgix.net/assets/003/427/650/40e345b7722cc8968147957a29bbde88_original.gif?v=1426170301&w=700&h=&fit=max&auto=format&q=92&s=4fbb7a0331a44c49365210776bb21679)
 
-## How to Use mDrawBot? 
+## How to Use mDrawBot?
 
-Each mDrawBot kit can be assembled into any of the 4 different configurations. We provide the detailed assembling instructions that enables you to build any configuration in an hour. 
+Each mDrawBot kit can be assembled into any of the 4 different configurations. We provide the detailed assembling instructions that enables you to build any configuration in an hour.
 The assembly instructions and the user guide can be downloaded here: [http://learn.makeblock.cc/mdrawbot/](http://learn.makeblock.cc/mdrawbot/)
 
-## Software 
+## Software
 
-mDraw is the software specially designed for mDrawBot. After installing the mDraw software, you can import images that you wish your robot to draw. It is completely compatible with the four forms of mDrawBot and also both the servo mode and laser mode of Makeblock XY Plotter V2.0. 
+mDraw is the software specially designed for mDrawBot. After installing the mDraw software, you can import images that you wish your robot to draw. It is completely compatible with the four forms of mDrawBot and also both the servo mode and laser mode of Makeblock XY Plotter V2.0.
 
-## Features of mDraw 
+## Features of mDraw
 
- - Support mScara, mSpider, mEggBot, mCar, XY  
- - Support both pen drawing and laser engraving  
- - Support custom settings of motor direction, drawing range, etc  
- - Support saving parameters  
- - Support SVG. file  
- - Support conversion from BMP to SVG  
- - Support zooming, rotating, mirroring, and moving the SVG graphics  
- - Support Windows7 or later. (Will be available in Mac OS X, Linux soon.)  
+ - Support mScara, mSpider, mEggBot, mCar, XY
+ - Support both pen drawing and laser engraving
+ - Support custom settings of motor direction, drawing range, etc
+ - Support saving parameters
+ - Support SVG. file
+ - Support conversion from BMP to SVG
+ - Support zooming, rotating, mirroring, and moving the SVG graphics
+ - Support Windows7 or later. (Will be available in Mac OS X, Linux soon.)
 
 ## About mDrawBot’s upgrade.
 
@@ -68,7 +74,7 @@ You can also design your own upgrade pack for your mDrawBot. By adding an [accel
 
 ## FAQ
 
-[Please refer to mDrawBot Download Package.](http://learn.makeblock.cc/mdrawbot/)  
+[Please refer to mDrawBot Download Package.](http://learn.makeblock.cc/mdrawbot/)
 
 Use mDraw software, refer to this address: [https://www.youtube.com/watch?v=um0TXejmmmQ](https://www.youtube.com/watch?v=um0TXejmmmQ)
 

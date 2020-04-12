@@ -51,7 +51,7 @@ def buildQuadraticBezierSegment(p0, p1, p2):
             currentSegmentY = curvePointY;
 
     if len(segList) == 0:
-        segList.append(p2[0], p2[1])
+        segList.append([p2[0], p2[1]])
     return segList
 
 def buildArcSegment(rx,ry,phi,fA,fS,x1,y1,x2,y2):
@@ -67,7 +67,7 @@ def buildArcSegment(rx,ry,phi,fA,fS,x1,y1,x2,y2):
     if lam>1:
         rx = sqrt(lam)*rx
         ry = sqrt(lam)*ry
-    
+
     # fix for math domain error
     tmp = (rx*rx*ry*ry-rx*rx*y1p*y1p-ry*ry*x1p*x1p)/(rx*rx*y1p*y1p+ry*ry*x1p*x1p)
     st = sqrt(round(tmp,5))
@@ -80,20 +80,20 @@ def buildArcSegment(rx,ry,phi,fA,fS,x1,y1,x2,y2):
     cx = cos(phi)*cxp-sin(phi)*cyp+(x1+x2)/2
     cy = sin(phi)*cxp+cos(phi)*cyp+(y1+y2)/2
     #print "cent",cx,cy
-    
+
     Vxc = (x1p-cxp)/rx
     Vyc = (y1p-cyp)/ry
     Vxc = (x1p-cxp)/rx
     Vyc = (y1p-cyp)/ry
     Vxcp = (-x1p-cxp)/rx
     Vycp = (-y1p-cyp)/ry
-    
+
     if Vyc>=0:
         cp_sign=1
     else:
         cp_sign=-1
     th1 = cp_sign*acos(Vxc/sqrt(Vxc*Vxc+Vyc*Vyc))/pi*180
-    
+
     if (Vxc*Vycp-Vyc*Vxcp)>=0:
         cp_sign=1
     else:
@@ -106,9 +106,9 @@ def buildArcSegment(rx,ry,phi,fA,fS,x1,y1,x2,y2):
         dth-=360
     elif fS>=1 and dth<0:
         dth+=360
-    
+
     #print "angle",th1,dth
-    
+
     # build route
     theta = th1/180*pi
     px = rx*cos(theta)+cx
@@ -124,7 +124,7 @@ def buildArcSegment(rx,ry,phi,fA,fS,x1,y1,x2,y2):
             segList.append((x,y))
             px=x;py=y;
     return segList
-    
+
 
 
 class SvgParser():
@@ -142,7 +142,7 @@ class SvgParser():
         self.tf = []
         self.usertf = [1,0,0,1,0,0]
         self.parse(filename)
-    
+
     # tranform matrix = [ a c e ]
     #                   [ b d f ]
     def moveTo(self,x,y):
@@ -155,7 +155,7 @@ class SvgParser():
 
         initpoint = [(x,y)]
         self.originPathList.append(initpoint)
-    
+
     def lineTo(self,x,y):
         for i in range(len(self.tf)):
             tf = self.tf[-1-i]
@@ -166,7 +166,7 @@ class SvgParser():
 
         point = (x,y)
         self.originPathList[-1].append(point)
-    
+
     def plotToScene(self):
         self.ptrList = []
         pen = QPen(QColor(124, 124, 124))
@@ -185,15 +185,15 @@ class SvgParser():
         #self.pathList = copy.deepcopy(self.originPathList)
         self.pathList=[]
         self.pathLen = 0
-        
+
         # avoid the deep copy
         for p in self.originPathList:
             self.pathList.append(list(p))
-        
+
         #print("resize",len(self.pathList))
         #print(self.originPathList[0][0])
         #print(self.pathList[0][0])
-        
+
         # user define transform
         for i in range(len(self.pathList)):
             for j in range(len(self.pathList[i])):
@@ -202,9 +202,9 @@ class SvgParser():
                 x1=self.usertf[0]*x+self.usertf[2]*y+self.usertf[4]
                 y1=self.usertf[1]*x+self.usertf[3]*y+self.usertf[5]
                 self.pathList[i][j] = (x1,y1)
-        
+
         #print(self.pathList[0][0])
-        
+
         (x,y) = self.pathList[0][0]
         (x0,y0) = (x,y)
         xmin = x*self.scale[0]
@@ -238,12 +238,12 @@ class SvgParser():
             for j in range(len(self.pathList[i])):
                 x = self.pathList[i][j][0]*self.scale[0]
                 y = self.pathList[i][j][1]*self.scale[1]
-                x = (x-xmin)*scaler+drawRect[0]                    
+                x = (x-xmin)*scaler+drawRect[0]
                 y = (y-ymin)*scaler+drawRect[1]
                 self.pathList[i][j] = (x,y)
         print("total len",self.pathLen)
         return (dx*scaler,dy*scaler)
-    
+
     # stretch for eggbot surface curve
     # eq: x^2/a^2+y^2/b^2 = 1
     # todo: apply a real egg shape equation: http://www.mathematische-basteleien.de/eggcurves.htm
@@ -257,10 +257,10 @@ class SvgParser():
                 x0 = h-sqrt(1-y0*y0/a/a)*h
                 x = x+x0
                 self.pathList[i][j] = (x,y)
-    
+
     def parsePath(self,node):
         pbuff=[]
-                
+
         d = node.getAttribute("d")
         ds = d.replace("e-","ee")
         ds=ds.replace("-"," -").replace("s", " s ").replace("S", " S ").replace("c", " c ").replace("C", " C ").replace("v", " v ").replace("V", " V ")
@@ -359,7 +359,7 @@ class SvgParser():
                     for s in arcSeg:
                         self.lineTo(s[0],s[1])
                     x=px;y=py
-                    
+
                 elif state=='A':
                     rx = float(ss[ptr])
                     ry = float(ss[ptr+1])
@@ -373,7 +373,7 @@ class SvgParser():
                     for s in arcSeg:
                         self.lineTo(s[0],s[1])
                     x=px;y=py
-                    
+
                 elif state=="c":
                     dx=float(ss[ptr])
                     dy=float(ss[ptr+1])
@@ -452,7 +452,7 @@ class SvgParser():
                         else:
                             pbuff.append(pbuff[0]) # if prev state not bez-curve, use current point as first control point
                             pbuff.append((x+dx,y+dy))
-                            
+
                     if curvecnt==2:
                         # set target point
                         pbuff.append((x+dx,y+dy))
@@ -489,8 +489,8 @@ class SvgParser():
                         x=ax;y=ay
                         pbuff=[(x,y)]
                         curvecnt = 0
-                    
-                    
+
+
                 elif state=="l":
                     dx=float(ss[ptr])
                     dy=float(ss[ptr+1])
@@ -513,7 +513,7 @@ class SvgParser():
                     ptr+=1
                     print("unknow state",state)
         return
-        
+
     def parseRect(self,node):
         w = float(node.getAttribute("width"))+self.xbias
         h = float(node.getAttribute("height"))+self.xbias
@@ -526,7 +526,7 @@ class SvgParser():
         self.lineTo(x,y+h)
         self.lineTo(x,y)
         return
-    
+
     def parseLine(self,node):
         x1 = float(node.getAttribute("x1"))+self.xbias
         x2 = float(node.getAttribute("x2"))+self.xbias
@@ -543,7 +543,7 @@ class SvgParser():
         #self.pathList.append([(x1,y1),(x2,y2)])
 
         return
-    
+
     def parsePolygon(self,node):
         tmp = []
         pstr = node.getAttribute("points")
@@ -573,10 +573,10 @@ class SvgParser():
         #path.lineTo(x,y)
         self.lineTo(x,y)
         #self.scene.addPath(path)
-        
+
         #self.pathList.append(tmp)
         return
-    
+
     def parsePolyline(self,node):
         tmp = []
         pstr = node.getAttribute("points")
@@ -602,12 +602,12 @@ class SvgParser():
         #self.scene.addPath(path)
         #self.pathList.append(tmp)
         return
-    
+
     def parseCircle(self,node):
         cx = float(node.getAttribute("cx"))
         cy = float(node.getAttribute("cy"))
         r = float(node.getAttribute("r"))
-        
+
         # move to start point of circle
         theta = 0
         px = r*cos(theta)+cx
@@ -623,7 +623,7 @@ class SvgParser():
             if dis>1:
                 self.lineTo(x, y)
                 px=x;py=y;
-    
+
     def parseTextNode(self,n):
         # parse transform tag
         sib = n.nextSibling
@@ -654,7 +654,7 @@ class SvgParser():
                     self.tf.append(tf)
             return tf
         return None
-    
+
     def parseTransform(self,node):
         tfAttr = node.getAttribute("transform")
         if tfAttr != "":
@@ -680,7 +680,7 @@ class SvgParser():
             return trans
         else:
             return None
-        
+
     def parseNode(self,node,deep):
         print(" "*deep,">>",node.nodeName,node.nodeType)
         tf = None
@@ -701,7 +701,7 @@ class SvgParser():
         else:
             print(" "*deep,"unknow",node.nodeName)
         return tf
-    
+
     def parseChildNodes(self,node,deep=1):
         print(" "*deep,"parse->",node.nodeName)
         # escape marker
@@ -717,7 +717,7 @@ class SvgParser():
                 tf = self.parseNode(n,deep)
                 if tf!=None:
                     self.tf.pop()
-            
+
     def parse(self,filename):
         dom = minidom.parse(filename)
         root = dom.documentElement
@@ -725,5 +725,5 @@ class SvgParser():
 
 if __name__ == '__main__':
     buildArcSegment(10,10,0,0,10,10,0)
-    
-    
+
+
